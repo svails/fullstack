@@ -2,18 +2,19 @@ import * as schema from "$lib/schema";
 import { createClient } from "@libsql/client";
 import { drizzle } from "drizzle-orm/libsql";
 import { migrate } from "drizzle-orm/libsql/migrator";
+import { env } from "$env/dynamic/private";
 
 // Create database
 const client = createClient({
-  url: process.env.TURSO_DATABASE_URL ?? "file:development.sqlite",
-  authToken: process.env.TURSO_AUTH_TOKEN,
-  syncUrl: process.env.TURSO_SYNC_URL,
-  syncInterval: process.env.TURSO_SYNC_URL ? 300 : undefined,
+  url: env.TURSO_DATABASE_URL ?? "file:development.sqlite",
+  authToken: env.TURSO_AUTH_TOKEN,
+  syncUrl: env.TURSO_SYNC_URL,
+  syncInterval: env.TURSO_SYNC_URL ? 300 : undefined,
 });
 export const db = drizzle(client, { schema });
 
 // Optimize when running locally
-if (!process.env.TURSO_AUTH_TOKEN) {
+if (!env.TURSO_AUTH_TOKEN) {
   await db.run(`
     PRAGMA journal_mode = WAL;
     PRAGMA synchronous = NORMAL;

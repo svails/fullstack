@@ -7,15 +7,16 @@ import {
   PutObjectCommand,
   S3Client,
 } from "@aws-sdk/client-s3";
+import { env } from "$env/dynamic/private";
 
 // S3
 const useS3 =
-  process.env.AWS_ACCESS_KEY_ID &&
-  process.env.AWS_ENDPOINT_URL_S3 &&
-  process.env.AWS_SECRET_ACCESS_KEY &&
-  process.env.BUCKET_NAME &&
-  process.env.AWS_REGION;
-const client = useS3 ? new S3Client({ region: process.env.AWS_REGION, endpoint: process.env.AWS_ENDPOINT_URL_S3 }) : undefined;
+  env.AWS_ACCESS_KEY_ID &&
+  env.AWS_ENDPOINT_URL_S3 &&
+  env.AWS_SECRET_ACCESS_KEY &&
+  env.BUCKET_NAME &&
+  env.AWS_REGION;
+const client = useS3 ? new S3Client({ region: env.AWS_REGION, endpoint: env.AWS_ENDPOINT_URL_S3 }) : undefined;
 
 // Create folder for local files
 export const folder = "files/";
@@ -29,7 +30,7 @@ export async function upload(path: string, data: File) {
   if (client) {
     await client.send(
       new PutObjectCommand({
-        Bucket: process.env.BUCKET_NAME,
+        Bucket: env.BUCKET_NAME,
         Key: path,
         Body: data,
       }),
@@ -43,7 +44,7 @@ export async function download(path: string): Promise<ReadableStream | Blob | un
   if (client) {
     const data = await client.send(
       new GetObjectCommand({
-        Bucket: process.env.BUCKET_NAME,
+        Bucket: env.BUCKET_NAME,
         Key: path,
       }),
     );
@@ -57,7 +58,7 @@ export async function remove(path: string) {
   if (client) {
     await client.send(
       new DeleteObjectCommand({
-        Bucket: process.env.BUCKET_NAME,
+        Bucket: env.BUCKET_NAME,
         Key: path,
       }),
     );
@@ -71,7 +72,7 @@ export async function exists(path: string): Promise<boolean> {
     try {
       await client.send(
         new HeadObjectCommand({
-          Bucket: process.env.BUCKET_NAME,
+          Bucket: env.BUCKET_NAME,
           Key: path,
         }),
       );
@@ -88,7 +89,7 @@ export async function list(path: string = "."): Promise<string[] | undefined> {
   if (client) {
     const data = await client.send(
       new ListObjectsV2Command({
-        Bucket: process.env.BUCKET_NAME,
+        Bucket: env.BUCKET_NAME,
         Prefix: path,
       }),
     );
