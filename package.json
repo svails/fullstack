@@ -43,6 +43,7 @@
     "formsnap": "^1.0.1",
     "lucide-svelte": "^0.453.0",
     "nodemailer": "^6.9.15",
+    "svelte-radix": "^1.1.1",
     "sveltekit-superforms": "^2.20.0",
     "tailwind-merge": "^2.5.4",
     "tailwind-variants": "^0.2.1",
