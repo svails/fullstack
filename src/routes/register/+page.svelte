@@ -10,8 +10,12 @@
   const { form: formData, delayed, submitting, enhance } = form;
 </script>
 
+<svelte:head>
+  <title>Register - Svails</title>
+</svelte:head>
+
 <div class="flex h-screen items-center justify-center px-4">
-  <div class="max-w-sm flex-grow">
+  <div class="max-w-xs flex-grow">
     <h1 class="mb-2 text-2xl font-bold">Register</h1>
 
     <form class="grid gap-2" method="post" use:enhance>
