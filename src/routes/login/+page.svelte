@@ -39,7 +39,7 @@
         {#if $loginDelayed}
           <Loader class="animate-spin" />
         {:else}
-          Submit
+          Login
         {/if}
       </Form.Button>
     </form>
