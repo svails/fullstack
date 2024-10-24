@@ -6,8 +6,8 @@
 
   // Props
   const { data } = $props();
-  const form = superForm(data.form);
-  const { form: formData, delayed, submitting, enhance } = form;
+  const registerForm = superForm(data.registerForm);
+  const { form: registerData, delayed: registerDelayed, submitting: registerSubmitting, enhance: registerEnhance } = registerForm;
 </script>
 
 <svelte:head>
@@ -18,28 +18,28 @@
   <div class="max-w-xs flex-grow">
     <h1 class="mb-2 text-2xl font-bold">Register</h1>
 
-    <form class="grid gap-2" method="post" use:enhance>
-      <Form.Field {form} name="email">
+    <form class="grid gap-2" method="post" action="?/register" use:registerEnhance>
+      <Form.Field form={registerForm} name="email">
         <Form.Control let:attrs>
           <Form.Label>Email</Form.Label>
-          <Input {...attrs} bind:value={$formData.email} />
+          <Input {...attrs} bind:value={$registerData.email} type="email" />
         </Form.Control>
         <Form.FieldErrors />
       </Form.Field>
 
-      <Form.Field {form} name="password">
+      <Form.Field form={registerForm} name="password">
         <Form.Control let:attrs>
           <Form.Label>Password</Form.Label>
-          <Input {...attrs} bind:value={$formData.password} type="password" />
+          <Input {...attrs} bind:value={$registerData.password} type="password" />
         </Form.Control>
         <Form.FieldErrors />
       </Form.Field>
 
-      <Form.Button disabled={$submitting}>
-        {#if $delayed}
+      <Form.Button disabled={$registerSubmitting}>
+        {#if $registerDelayed}
           <Loader class="animate-spin" />
         {:else}
-          Register
+          Submit
         {/if}
       </Form.Button>
     </form>

@@ -1,34 +1,34 @@
-import type { Actions, PageServerLoad } from "./$types";
 import { z } from "zod";
 import { zod } from "sveltekit-superforms/adapters";
 import { fail, setError, superValidate } from "sveltekit-superforms";
 import { login } from "$lib/session";
 import { redirect } from "@sveltejs/kit";
+import type { Actions, PageServerLoad } from "./$types";
 
-const schema = z.object({
+const loginSchema = z.object({
   email: z.string().email(),
-  password: z.string().min(8, { message: "Password must be minimum 8 characters long" }),
+  password: z.string().min(8, { message: "Password must be minimum 8 characters" }),
 });
 
 export const load: PageServerLoad = async () => {
   // Initialize form
   return {
-    form: await superValidate(zod(schema)),
+    loginForm: await superValidate(zod(loginSchema)),
   };
 };
 
 export const actions: Actions = {
-  default: async ({ request, cookies }) => {
+  login: async ({ request, cookies }) => {
     // Validate form
-    const form = await superValidate(request, zod(schema));
-    if (!form.valid) return fail(400, { form });
-    const { email, password } = form.data;
+    const loginForm = await superValidate(request, zod(loginSchema));
+    if (!loginForm.valid) return fail(400, { loginForm });
+    const { email, password } = loginForm.data;
 
     // Login user
     try {
       await login(email, password, cookies);
     } catch (error) {
-      return setError(form, "password", "Email or password is invalid");
+      return setError(loginForm, "password", "Email or password is invalid");
     }
     return redirect(303, "/");
   },

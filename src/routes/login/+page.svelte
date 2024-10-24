@@ -6,8 +6,8 @@
 
   // Props
   const { data } = $props();
-  const form = superForm(data.form);
-  const { form: formData, delayed, submitting, enhance } = form;
+  const loginForm = superForm(data.loginForm);
+  const { form: loginData, delayed: loginDelayed, submitting: loginSubmitting, enhance: loginEnhance } = loginForm;
 </script>
 
 <svelte:head>
@@ -18,28 +18,28 @@
   <div class="max-w-xs flex-grow">
     <h1 class="mb-2 text-2xl font-bold">Login</h1>
 
-    <form class="grid gap-2" method="post" use:enhance>
-      <Form.Field {form} name="email">
+    <form class="grid gap-2" method="post" action="?/login" use:loginEnhance>
+      <Form.Field form={loginForm} name="email">
         <Form.Control let:attrs>
           <Form.Label>Email</Form.Label>
-          <Input {...attrs} bind:value={$formData.email} />
+          <Input {...attrs} bind:value={$loginData.email} type="email" />
         </Form.Control>
         <Form.FieldErrors />
       </Form.Field>
 
-      <Form.Field {form} name="password">
+      <Form.Field form={loginForm} name="password">
         <Form.Control let:attrs>
           <Form.Label>Password</Form.Label>
-          <Input {...attrs} bind:value={$formData.password} type="password" />
+          <Input {...attrs} bind:value={$loginData.password} type="password" />
         </Form.Control>
         <Form.FieldErrors />
       </Form.Field>
 
-      <Form.Button disabled={$submitting}>
-        {#if $delayed}
+      <Form.Button disabled={$loginSubmitting}>
+        {#if $loginDelayed}
           <Loader class="animate-spin" />
         {:else}
-          Login
+          Submit
         {/if}
       </Form.Button>
     </form>
